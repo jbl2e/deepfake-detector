@@ -4,7 +4,7 @@
 
 <img width="1024" height="267" alt="image" src="https://github.com/user-attachments/assets/ad8e69da-1088-4bc0-bdb1-46bc040776b7" />
 
-
+* [재용2]팀 구성 : 이재용(팀장), 최재우, 김세진
 * **Public Score**: 0.98646
 * **Private Score**: 0.96949
 
