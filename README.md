@@ -1,13 +1,12 @@
 # 🏆 DACON 1st Place Deepfake Detection (DINOv3 + LoRA + Reg Tokens)
 
-🏆 [DACON 대회](https://dacon.io/competitions/official/236628/overview/description) **대상** 수상
+🏆 [DACON 대회](https://dacon.io/competitions/official/236628/overview/description) 대상 수상
 
-<img width="1024" height="267" alt="image" src="https://github.com/user-attachments/assets/51e4e8dc-b4a6-4a6d-b722-077ea05433ad" />
+<img width="1024" height="267" alt="image" src="https://github.com/user-attachments/assets/ad8e69da-1088-4bc0-bdb1-46bc040776b7" />
 
 
 * **Public Score**: 0.98646
 * **Private Score**: 0.96949
-* [재용2]팀 : 이재용[팀장], 최재우, 김세진
 
 본 프로젝트는 **DINOv3 (ViT-L/16)** 모델을 사용하여 구축된 딥페이크 탐지 시스템입니다.
 
@@ -25,7 +24,7 @@
 
 **DINOv3 + LoRA + 레지스터 토큰 기반 헤드 구성**
 
-<img width="1024" height="348" alt="image" src="https://github.com/user-attachments/assets/7447ca1f-ef87-459a-a824-7b1b6610f9d1" />
+<img width="1024" height="348" alt="image" src="https://github.com/user-attachments/assets/d539f54c-ef1d-44a0-87d1-321fa08cc675" />
 
 
 ---
@@ -44,9 +43,11 @@
 │   └── ...                  # 기타 데이터셋별 폴더
 │
 ├── model/
-│   ├── checkpoint/            # 학습 중 모델 가중치 저장소
-│   ├── model.pt                # 학습 중 생성되는 best model (재현용)
-│   └── inference.pth            # 추론용 가중치 (최종 제출 파일)
+│   ├── checkpoints/           # 학습 중 모델 가중치 저장소
+│   ├── dinov3_backbone/       # DINOv3 사전학습 모델 (별도 다운로드 필요)
+│   ├── .insightface/          # 얼굴 crop 모델 (buffalo_l)
+│   ├── model.pt               # 학습 중 생성되는 best model (재현용)
+│   └── inference.pth          # 추론용 가중치 (최종 제출 파일)
 │
 ├── src/
 │   ├── models.py               # 모델 구조 정의
@@ -204,10 +205,17 @@ python inference.py
 * **[데이터 관련]**
   라이선스 규정으로 인해 사용된 데이터셋 목록은 아래에 명시되어 있으나,
   실제 학습에 사용된 zip 파일은 별도로 제공되지 않습니다.
-  필요하신 경우 아래 메일로 문의 부탁드립니다.
+  필요하신 경우 아래 메일로 문의(contact) 부탁드립니다.
 
 * **[추론 관련]**
   추론 가중치: [Google Drive](https://drive.google.com/file/d/1Vr3q5zM6Nqc6yejrULZEFspCRZEG2ISi/view?usp=drive_link)
+
+* **[모델 관련]**
+  얼굴 crop은 insightface의 **buffalo_l** 모델을 사용합니다.
+  학습 backbone은 **dinov3-vits16-pretrain-lvd1689m**을 사용하였습니다.
+
+  해당 모델들은 재배포가 제한되어 있으므로,
+  공식 경로를 통해 별도로 다운로드 후 사용해주시기 바랍니다.
 
 추가적인 문의는 아래 메일로 연락 바랍니다.
 
