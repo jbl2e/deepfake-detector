@@ -1,0 +1,98 @@
+# config/config.yaml
+project:
+  seed: 42
+
+paths:
+  train_data_root: "./train_data"
+  train_data_zips: "./train_data/train_data_zips"
+  output_dir: "./model"
+  checkpoint_dir: "./model/checkpoints"
+
+data:
+  # ✅ 1개의 zip만 자동 해제
+  archives:
+    - path: "./train_data/train_data_zips/train_full_data.zip"
+      dest: "./train_data/train_full_data"
+      marker: "_FULL_EXTRACT_DONE"   # marker file/dir 이름 (아래 코드에서 파일로 생성)
+
+  # ✅ 최종 소스 폴더들(압축 해제 후 train_data/train_full_data 아래에 존재한다고 가정)
+  # (너가 준 sources를 그대로 yaml로 옮김)
+  sources:
+    real:
+      - "./train_data/train_full_data/Real-img/Real-img"
+      - "./train_data/train_full_data/Real"
+      - "./train_data/train_full_data/ffhq"
+      - "./train_data/train_full_data/video_frames/real"
+      - "./train_data/train_full_data/refined_dataset/real"
+      - "./train_data/train_full_data/refined_dataset/real"
+      - "./train_data/train_full_data/originalval/real"
+      - "./train_data/train_full_data/dfd_final_dataset/dfd_final_dataset/real"
+      - "./train_data/train_full_data/kodf_video_frame_v2/real"
+      - "./train_data/train_full_data/pexel_video_frame/real"
+
+    fake:
+      - "./train_data/train_full_data/DiffSwap"
+      - "./train_data/train_full_data/Fake-img/Image"
+      - "./train_data/train_full_data/Inpaint/images"
+      - "./train_data/train_full_data/SDv21_DS0.3"
+      - "./train_data/train_full_data/video_frames/fake"
+      - "./train_data/train_full_data/SDv15_DS0.3"
+      - "./train_data/train_full_data/SDv15_DS0.5"
+      - "./train_data/train_full_data/SDv15_DS0.7"
+      - "./train_data/train_full_data/stable_diffusion_v_2_1_text2img_p1g7/aligned"
+      - "./train_data/train_full_data/refined_dataset/fake"
+      - "./train_data/train_full_data/originalval/fake"
+      - "./train_data/train_full_data/extracted_images"
+      - "./train_data/train_full_data/dfd_final_dataset/dfd_final_dataset/fake"
+      - "./train_data/train_full_data/kodf_video_frame_v2/fake"
+
+
+  # ✅ 네가 준 타겟 그대로 (train_target=(real,fake), valid_target=(real,fake))
+  split_targets:
+    train_target: [164000, 175000]
+    valid_target: [35000, 35000]
+
+model:
+  hf_model_id: "facebook/dinov3-vitl16-pretrain-lvd1689m"
+
+  # ✅ 오프라인 로드용: 프로젝트 내부에 저장된 백본 폴더
+  local_backbone_dir: "./model/dinov3_backbone"
+
+  # ✅ 오프라인 강제 여부 (true면 인터넷 없이 로컬만 사용)
+  offline_only: true
+
+  lora:
+    r: 16
+    alpha: 32
+    dropout: 0.05
+    target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj"]
+
+  feature:
+    reg_indices: [1, 2]
+    patch_start_index: 5
+
+  head:
+    hidden_dim: 512
+    dropout: 0.3
+
+train:
+  input_size: 448
+  batch_size: 32
+  num_workers: 8
+
+  pin_memory: true
+  drop_last: true
+  use_weighted_sampler: true
+
+  epochs: 5
+  amp: true
+  accumulation_steps: 3
+
+  optimizer:
+    name: "adamw"
+    lr: 1e-4
+    weight_decay: 1e-5
+
+  save:
+    save_best_only: true
+    best_name: "model.pt"
