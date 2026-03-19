@@ -1,4 +1,4 @@
-# 🛡️ DINOv3 기반 Deepfake Detection 재현 가이드
+# 🏆 DACON 1st Place Deepfake Detection (DINOv3 + LoRA + Reg Tokens)
 
 🏆 [DACON 대회](https://dacon.io/competitions/official/236628/overview/description) **대상** 수상
 
