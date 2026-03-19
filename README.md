@@ -1,9 +1,32 @@
 # 🛡️ DINOv3 기반 Deepfake Detection 재현 가이드
 
+🏆 [DACON 대회](https://dacon.io/competitions/official/236628/overview/description) **대상** 수상
+
+<img width="1024" height="267" alt="image" src="https://github.com/user-attachments/assets/51e4e8dc-b4a6-4a6d-b722-077ea05433ad" />
+
+
+* **Public Score**: 0.98646
+* **Private Score**: 0.96949
+* [재용2]팀 : 이재용[팀장], 최재우, 김세진
+
 본 프로젝트는 **DINOv3 (ViT-L/16)** 모델을 사용하여 구축된 딥페이크 탐지 시스템입니다.
 
-
 본 문서는 연구 재현을 위한 환경 설정 및 실행 방법을 안내합니다.
+
+---
+
+## 📊 프로젝트 소개 자료
+
+[📄 Google Drive에서 보기](https://drive.google.com/file/d/1O6lIAQ_zACPlP0KJSJKwNrnfoYs61dNf/view)
+
+---
+
+## 🧠 모델 아키텍처
+
+**DINOv3 + LoRA + 레지스터 토큰 기반 헤드 구성**
+
+<img width="1024" height="348" alt="image" src="https://github.com/user-attachments/assets/7447ca1f-ef87-459a-a824-7b1b6610f9d1" />
+
 
 ---
 
@@ -65,7 +88,7 @@
 
 #### (1) 환경 설정
 
-- Docker 사용 시:
+* Docker 사용 시:
 
 Image Name 예시:) deepfake-dinov3
 
@@ -73,7 +96,7 @@ Image Name 예시:) deepfake-dinov3
 docker build -t deepfake-dinov3 -f env/Dockerfile
 ```
 
-- 로컬에서 가상 환경으로 사용 시:
+* 로컬에서 가상 환경으로 사용 시:
 
 Python 3.10~3.12 권장
 
@@ -87,7 +110,7 @@ export RUNTIME_ROOT=/content #절대 경로설정으로, 큰 데이터를 풀기
 export TORCH_COMPILE_DISABLE="1"
 ```
 
-- 주피터 노트북을 이용한 실행 방법:
+* 주피터 노트북을 이용한 실행 방법:
 
 ```bash
 python -m pip install --upgrade pip
@@ -112,7 +135,7 @@ os.environ["TORCH_COMPILE_DISABLE"] = "1"
 
 ### 2. 학습
 
-- Docker로 학습 재현 시:
+* Docker로 학습 재현 시:
 
 ```bash
 docker run --gpus all --rm \
@@ -122,14 +145,13 @@ docker run --gpus all --rm \
   deepfake-dinov3 python train.py --config config/config.yaml
 ```
 
-
-- 로컬에서 가상 환경으로 사용 시:
+* 로컬에서 가상 환경으로 사용 시:
 
 ```bash
 python train.py --config config/config.yaml
 ```
 
-- 주피터 노트북을 이용한 실행 방법:
+* 주피터 노트북을 이용한 실행 방법:
 
 ```bash
 !python train.py --config config/config.yaml
@@ -153,36 +175,51 @@ Image Name 예시:) deepfake-dinov3
 docker run --gpus all --rm deepfake-dinov3
 ```
 
-
 로컬에서 가상 환경으로 사용 시:
 
 ```bash
 python inference.py
 ```
 
-- 주피터 노트북을 이용한 실행 방법:
+* 주피터 노트북을 이용한 실행 방법:
 
 ```bash
 !python inference.py
 ```
-
 
 실행 후 결과는 `test_data/submission.csv`에 저장됩니다.
 
 ---
 
 ### 주의사항
-- [Project_Dir_Path]는 데이터 압축 해제 경로[RUNTIME_ROOT]와 다릅니다. [RUNTIME_ROOT]는 기본적으로 루트 바로 하위에 생기므로 권한 여부를 잘 판단하고 읽을 수 있는 위치에 두시기 바랍니다.
-- 데이터가 크기 때문에 Dockerfile로 Image를 빌드 시에 데이터는 다루기 편한 곳에 위치해주시고 [Host_Data_Dir]를 train_data_zips에 올바르게 마운트하여 실행해 주세요.
-- 추론시 모델 경로가 기본값 inference.pth로 설정되어 있습니다. 개인적이 실험 혼경에서 도출한 가중치이며 학습 재현을 모니터링 하길 원하시면 '학습 후에 checkpoints/epoch_05.pt 또는 model.pt를 사용해주세요'
+
+* [Project_Dir_Path]는 데이터 압축 해제 경로[RUNTIME_ROOT]와 다릅니다. [RUNTIME_ROOT]는 기본적으로 루트 바로 하위에 생기므로 권한 여부를 잘 판단하고 읽을 수 있는 위치에 두시기 바랍니다.
+* 데이터가 크기 때문에 Dockerfile로 Image를 빌드 시에 데이터는 다루기 편한 곳에 위치해주시고 [Host_Data_Dir]를 train_data_zips에 올바르게 마운트하여 실행해 주세요.
+* 추론시 모델 경로가 기본값 inference.pth로 설정되어 있습니다. 개인적이 실험 혼경에서 도출한 가중치이며 학습 재현을 모니터링 하길 원하시면 '학습 후에 checkpoints/epoch_05.pt 또는 model.pt를 사용해주세요'
+
+---
+
+## 📌 안내
+
+* **[데이터 관련]**
+  라이선스 규정으로 인해 사용된 데이터셋 목록은 아래에 명시되어 있으나,
+  실제 학습에 사용된 zip 파일은 별도로 제공되지 않습니다.
+  필요하신 경우 아래 메일로 문의 부탁드립니다.
+
+* **[추론 관련]**
+  추론 가중치: [Google Drive](https://drive.google.com/file/d/1Vr3q5zM6Nqc6yejrULZEFspCRZEG2ISi/view?usp=drive_link)
+
+추가적인 문의는 아래 메일로 연락 바랍니다.
+
+📧 [taland797@gmail.com](mailto:taland797@gmail.com)
+
 ---
 
 ## 📄 데이터 라이선스
 
 ### Dataset Information & Licenses
 
-본 프로젝트에서 사용된 데이터셋의 출처와 라이선스 정보입니다.
-모든 데이터는 각 제공처의 라이선스 규정을 준수하여 사용되었습니다.
+본 프로젝트에서 사용된 데이터셋의 출처와 라이선스 정보입니다. 모든 데이터는 각 제공처의 라이선스 규정을 준수하여 사용되었습니다.
 
 | 데이터셋          | 라이선스            | 링크                                                                                                                                                                                                            |
 | ------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
